@@ -14,7 +14,7 @@
     </insert>
     <select id="getAllUser" resultType="com.zsp.bean.User">
         select *
-        from user
+        from store_user
     </select>
     <select id="loginByUserName" parameterType="String" resultType="com.zsp.bean.User">
         select *
