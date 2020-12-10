@@ -1,10 +1,7 @@
 package com.zsp.mapper;
 
-import com.zsp.bean.User;
+import com.zsp.entity.StoreUserEntity;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-
-import java.util.List;
 
 /**
  * description:
@@ -13,14 +10,7 @@ import java.util.List;
  */
 @Mapper
 public interface LoginMapper {
-
-    User getUserById(int id);
-
-    int insertUser(User user);
-
-    List<User> getAllUser();
-
-    User loginByUserName(@Param("name") String name, @Param("password") String password);
-
-    int updateUser(User user);
+    StoreUserEntity getUser(StoreUserEntity user);
+    int registerUser(StoreUserEntity user);
+    StoreUserEntity findUserByName(String userName);
 }

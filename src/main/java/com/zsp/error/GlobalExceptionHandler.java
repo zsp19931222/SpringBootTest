@@ -2,7 +2,13 @@ package com.zsp.error;
 
 import com.zsp.util.CommonEnum;
 import com.zsp.util.Log;
+import io.jsonwebtoken.ExpiredJwtException;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.validation.BindException;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -48,6 +54,55 @@ public class GlobalExceptionHandler {
     }
 
 
+    @ExceptionHandler(value = HttpRequestMethodNotSupportedException.class)
+    @ResponseBody
+    public ResultBody exceptionHandler(HttpServletRequest req, HttpRequestMethodNotSupportedException e) {
+        Log.error("请求异常！原因是:", e);
+        return ResultBody.error(CommonEnum.RequestMethodNotSupportedException);
+    }
+
+
+    @ExceptionHandler(value = HttpMessageNotReadableException.class)
+    @ResponseBody
+    public ResultBody exceptionHandler(HttpServletRequest req, HttpMessageNotReadableException e) {
+        Log.error("请求异常！原因是:", e);
+        return ResultBody.error(CommonEnum.HttpMessageNotReadableException);
+    }
+    /**
+     * 所有验证框架异常捕获处理
+     * @return
+     */
+    @ResponseBody
+    @ExceptionHandler(value = {BindException.class, MethodArgumentNotValidException.class})
+    public Object validationExceptionHandler(Exception exception) {
+        BindingResult bindResult = null;
+        if (exception instanceof BindException) {
+            bindResult = ((BindException) exception).getBindingResult();
+        }
+        String msg;
+        if (bindResult != null && bindResult.hasErrors()) {
+            msg = bindResult.getAllErrors().get(0).getDefaultMessage();
+            if (msg.contains("NumberFormatException")) {
+                msg = "参数类型错误！";
+            }
+        }else {
+            msg = "系统繁忙，请稍后重试...";
+        }
+        return ResultBody.error(msg);
+    }
+
+
+    /**
+     * @param exception
+     * @return
+     * @throws Exception
+     * @// TODO: 2018/4/25 处理token 过期异常
+     */
+    @ExceptionHandler(value = ExpiredJwtException.class)
+    public ResultBody ExpiredJwtExceptionHandler(ExpiredJwtException exception) throws Exception {
+        Log.info(exception.getMessage());
+        return ResultBody.error("登录已过期！");
+    }
     /**
      * 处理其他异常
      */

@@ -1,11 +1,14 @@
 package com.zsp.error;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.zsp.util.BaseErrorInfoInterface;
 import com.zsp.util.CommonEnum;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * description:
@@ -81,7 +84,6 @@ public class ResultBody {
         rb.setResult(data);
         return rb;
     }
-
     /**
      * 失败
      */
@@ -119,9 +121,10 @@ public class ResultBody {
     public String toString() {
         return JSONObject.toJSONString(this);
     }
+
     public static void writeJSON2Response(Object out, HttpServletResponse response) {
         response.setCharacterEncoding("UTF-8");
-        response.setContentType("text/html;charset=UTF-8");
+        response.setContentType("application/json");
         try {
             //System.out.println("SERVER: " + out);
             response.getWriter().print(out);

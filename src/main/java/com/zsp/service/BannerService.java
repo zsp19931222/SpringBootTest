@@ -1,6 +1,6 @@
 package com.zsp.service;
 
-import com.zsp.bean.Banner;
+import com.zsp.entity.Banner;
 import com.zsp.mapper.BannerMapper;
 import org.springframework.stereotype.Service;
 

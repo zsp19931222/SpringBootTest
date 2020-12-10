@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zsp.mapper.CarMapper">
+    <resultMap id="car" type="com.zsp.entity.StoreCartEntity">
+        <result column="user_id" property="userId"/>
+        <result column="product_id" property="productId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <resultMap id="product" type="com.zsp.entity.StoreProductEntity">
+        <id column="id" property="id"/>
+        <result column="main_image" property="mainImage"/>
+        <result column="sub_images" property="subImages"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="category_id" property="categoryId"/>
+    </resultMap>
+
+    <insert id="addProduct" parameterType="com.zsp.entity.StoreCartEntity">
+        insert into store_cart
+        values (#{id}, #{userId}, #{productId}, #{quantity}, #{checked}, #{createTime}, #{updateTime})
+    </insert>
+    <select id="getProductList" parameterType="Integer" resultMap="product">
+        SELECT * FROM store_product p left join store_cart c on  p.id=c.product_id where
+            user_id=#{userId}
+    </select>
+</mapper>

@@ -1,6 +1,6 @@
 package com.zsp.service;
 
-import com.zsp.bean.StoreProductEntity;
+import com.zsp.entity.StoreProductEntity;
 import com.zsp.mapper.ProductMapper;
 import org.springframework.stereotype.Service;
 
@@ -19,5 +19,9 @@ public class ProductService {
 
     public List<StoreProductEntity> productEntityList() {
         return productMapper.productList();
+    }
+
+    public List<StoreProductEntity> getProductListById(int categoryId) {
+        return productMapper.getProductListById(categoryId);
     }
 }

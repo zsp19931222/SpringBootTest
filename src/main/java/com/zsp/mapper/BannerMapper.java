@@ -1,6 +1,6 @@
 package com.zsp.mapper;
 
-import com.zsp.bean.Banner;
+import com.zsp.entity.Banner;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

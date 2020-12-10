@@ -24,4 +24,17 @@ public class ProductController {
         PageHelper.startPage(pageNo, pageSize);
         return ResultBody.success(productService.productEntityList());
     }
+
+    @GetMapping(value = "/getProductListById/{categoryId}")
+    @ResponseBody
+    /**
+     * @description: 根据categoryId获取相应数据
+     * @author: zsp
+     * @date: 2020/12/3 0003 15:13
+     * @param categoryId
+     * @return: com.zsp.error.ResultBody
+     */
+    public ResultBody getProductListById(@PathVariable("categoryId") Integer categoryId) {
+        return ResultBody.success(productService.getProductListById(categoryId));
+    }
 }

@@ -1,6 +1,6 @@
 package com.zsp.mapper;
 
-import com.zsp.bean.StoreProductEntity;
+import com.zsp.entity.StoreProductEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -14,4 +14,6 @@ import java.util.List;
 @Mapper
 public interface ProductMapper {
     List<StoreProductEntity> productList();
+
+    List<StoreProductEntity> getProductListById(@Param(value = "categoryId") int categoryId);
 }

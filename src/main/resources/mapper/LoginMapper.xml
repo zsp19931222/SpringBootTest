@@ -3,26 +3,17 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zsp.mapper.LoginMapper">
-    <select id="getUserById" parameterType="Integer" resultType="com.zsp.bean.User">
-        select *
-        from user
-        where id = #{id}
+    <resultMap id="user" type="com.zsp.entity.StoreUserEntity">
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+    <select id="getUser" parameterType="com.zsp.entity.StoreUserEntity" resultMap="user">
+        select * from store_user where username=#{username} and password=#{password}
     </select>
-    <insert id="insertUser" parameterType="com.zsp.bean.User">
-        insert into user(name, password, email, image_path, role)
-        values (#{name}, #{password}, #{email}, #{image_path}, false)
+    <insert id="registerUser" parameterType="com.zsp.entity.StoreUserEntity" >
+        insert into store_user values (#{id},#{username},#{password},#{email},#{phone},#{question},#{answer},#{role},#{createTime},#{updateTime},#{photo})
     </insert>
-    <select id="getAllUser" resultType="com.zsp.bean.User">
-        select *
-        from store_user
+    <select id="findUserByName" parameterType="String" resultMap="user">
+        select * from store_user where username= #{userName}
     </select>
-    <select id="loginByUserName" parameterType="String" resultType="com.zsp.bean.User">
-        select *
-        from user
-        where name = #{name}
-          and password = #{password}
-    </select>
-    <update id="updateUser" >
-        update user set image_path=#{image_path} whenever id=#{id}
-    </update>
 </mapper>
