@@ -2,6 +2,7 @@ package com.zsp.jwt;
 
 import com.zsp.error.ResultBody;
 import com.zsp.util.IRedisService;
+import com.zsp.util.Test;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -13,6 +14,8 @@ import org.springframework.stereotype.Component;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
+
+import static com.zsp.util.CommonEnum.SIGNATURE_NOT_MATCH;
 
 /**
  * description:
@@ -39,9 +42,13 @@ public class TokenAuthenticationService {
                 // 签名设置
                 .signWith(SignatureAlgorithm.HS512, SECRET)
                 .compact();
-        iRedisService.set(username, JWT, System.currentTimeMillis() + EXPIRATIONTIME);
-        // 将 JWT 写入 body
-        ResultBody.writeJSON2Response(ResultBody.success(JWT), response);
+      boolean b=  iRedisService.set(username, JWT, System.currentTimeMillis() + EXPIRATIONTIME);
+      if (b){
+          // 将 JWT 写入 body
+          ResultBody.writeJSON2Response(ResultBody.success(JWT), response);
+      }else {
+          ResultBody.writeJSON2Response(ResultBody.error("获取token失败，请稍后重试。"), response);
+      }
     }
 
     // JWT验证方法
@@ -67,11 +74,11 @@ public class TokenAuthenticationService {
                             new UsernamePasswordAuthenticationToken(user, null, null) :
                             null;
                 } else {
-                    ResultBody.writeJSON2Response(ResultBody.error("无效token"), response);
+                    ResultBody.writeJSON2Response(ResultBody.error(SIGNATURE_NOT_MATCH), response);
                     return null;
                 }
             } catch (Exception e) {
-                ResultBody.writeJSON2Response(ResultBody.error("无效token"), response);
+                ResultBody.writeJSON2Response(ResultBody.error(SIGNATURE_NOT_MATCH), response);
                 return null;
             }
         }
